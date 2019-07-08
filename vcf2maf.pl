@@ -435,25 +435,26 @@ unless( -s $output_vcf ) {
     ( -s $vep_script ) or die "ERROR: Cannot find VEP script in path: $vep_path\n";
 
     # Contruct VEP command using some default options and run it
-    my $vep_cmd = "$perl_bin $vep_script --species $species --assembly $ncbi_build --no_progress --no_stats --buffer_size $buffer_size --sift b --ccds --uniprot --hgvs --symbol --numbers --domains --gene_phenotype --canonical --protein --biotype --uniprot --tsl --variant_class --shift_hgvs 1 --check_existing --total_length --allele_number --no_escape --xref_refseq --failed 1 --vcf --flag_pick_allele --pick_order canonical,tsl,biotype,rank,ccds,length --dir $vep_data --fasta $ref_fasta --format vcf --input_file $input_vcf --output_file $output_vcf";
+    #my $vep_cmd = "$perl_bin $vep_script --species $species --assembly $ncbi_build --no_progress --no_stats --buffer_size $buffer_size --sift b --ccds --uniprot --hgvs --symbol --numbers --domains --gene_phenotype --canonical --protein --biotype --uniprot --tsl --variant_class --shift_hgvs 1 --check_existing --total_length --allele_number --no_escape --xref_refseq --failed 1 --vcf --flag_pick_allele --pick_order canonical,tsl,biotype,rank,ccds,length --dir $vep_data --fasta $ref_fasta --format vcf --input_file $input_vcf --output_file $output_vcf";
     # Change options based on whether we are running in offline mode or not
-    $vep_cmd .= ( $online ? " --database --host useastdb.ensembl.org" : " --offline --pubmed" );
+    #$vep_cmd .= ( $online ? " --database --host useastdb.ensembl.org" : " --offline --pubmed" );
     # VEP barks if --fork is set to 1. So don't use this argument unless it's >1
-    $vep_cmd .= " --fork $vep_forks" if( $vep_forks > 1 );
+    #$vep_cmd .= " --fork $vep_forks" if( $vep_forks > 1 );
     # Require allele match for co-located variants unless user-rejected or we're using a newer VEP
-    $vep_cmd .= " --check_allele" unless( $any_allele or $vep_script =~ m/vep$/ );
+    #$vep_cmd .= " --check_allele" unless( $any_allele or $vep_script =~ m/vep$/ );
     # Add --cache-version only if the user specifically asked for a version
-    $vep_cmd .= " --cache_version $cache_version" if( $cache_version );
+    #$vep_cmd .= " --cache_version $cache_version" if( $cache_version );
     # Add options that only work on human variants
-    if( $species eq "homo_sapiens" ) {
+    #if( $species eq "homo_sapiens" ) {
         # Slight change in options if in offline mode, or if using the newer VEP
-        $vep_cmd .= " --polyphen b" . ( $vep_script =~ m/vep$/ ? " --af" : " --gmaf" );
-        $vep_cmd .= ( $vep_script =~ m/vep$/ ? " --af_1kg --af_esp --af_gnomad" : " --maf_1kg --maf_esp" ) unless( $online );
-    }
+    #    $vep_cmd .= " --polyphen b" . ( $vep_script =~ m/vep$/ ? " --af" : " --gmaf" );
+    #    $vep_cmd .= ( $vep_script =~ m/vep$/ ? " --af_1kg --af_esp --af_gnomad" : " --maf_1kg --maf_esp" ) unless( $online );
+    #}
     # Do not use the --regulatory option in situations where we know it will break
-    $vep_cmd .= " --regulatory" unless( $species eq "canis_familiaris" or $online );
+    #$vep_cmd .= " --regulatory" unless( $species eq "canis_familiaris" or $online );
 
     # Make sure it ran without error codes
+    my $vep_cmd = "$perl_bin $vep_script --config vep.config --input-file $input_vcf --output-file $output_vcf";
     system( $vep_cmd ) == 0 or die "\nERROR: Failed to run the VEP annotator! Command: $vep_cmd\n";
     ( -s $output_vcf ) or warn "WARNING: VEP-annotated VCF file is missing or empty: $output_vcf\n";
 }
