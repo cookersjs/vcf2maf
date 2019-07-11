@@ -534,7 +534,7 @@ $maf_fh->print( "#version 2.4\n" . join( "\t", @maf_header ), "\n" ); # Print MA
 my $annotated_vcf_fh = IO::File->new( $output_vcf ) or die "ERROR: Couldn't open annotated VCF: $output_vcf!\n";
 my ( $vcf_tumor_idx, $vcf_normal_idx, %sv_pair );
 while( my $line = $annotated_vcf_fh->getline ) {
-    print $line . "\n";
+    
     # Parse out the VEP CSQ/ANN format, which seems to differ between runs
     if( $line =~ m/^##INFO=<ID=(CSQ|ANN).*Format: (\S+)">$/ ) {
         # Use this as the expected column order of VEP annotation, unless we already got it from CSQ
