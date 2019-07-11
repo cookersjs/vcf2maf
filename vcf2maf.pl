@@ -454,7 +454,8 @@ unless( -s $output_vcf ) {
     #$vep_cmd .= " --regulatory" unless( $species eq "canis_familiaris" or $online );
 
     # Make sure it ran without error codes
-    my $vep_cmd = "$perl_bin $vep_script --config vep.config --input-file $input_vcf --output-file $output_vcf";
+    my $vep_cmd = "$perl_bin $vep_script --config vep.config --input_file $input_vcf --output_file $output_vcf";
+    print $vep_cmd . "\n";
     system( $vep_cmd ) == 0 or die "\nERROR: Failed to run the VEP annotator! Command: $vep_cmd\n";
     ( -s $output_vcf ) or warn "WARNING: VEP-annotated VCF file is missing or empty: $output_vcf\n";
 }
@@ -533,7 +534,7 @@ $maf_fh->print( "#version 2.4\n" . join( "\t", @maf_header ), "\n" ); # Print MA
 my $annotated_vcf_fh = IO::File->new( $output_vcf ) or die "ERROR: Couldn't open annotated VCF: $output_vcf!\n";
 my ( $vcf_tumor_idx, $vcf_normal_idx, %sv_pair );
 while( my $line = $annotated_vcf_fh->getline ) {
-
+    print $line . "\n";
     # Parse out the VEP CSQ/ANN format, which seems to differ between runs
     if( $line =~ m/^##INFO=<ID=(CSQ|ANN).*Format: (\S+)">$/ ) {
         # Use this as the expected column order of VEP annotation, unless we already got it from CSQ
