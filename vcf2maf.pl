@@ -455,7 +455,6 @@ unless( -s $output_vcf ) {
 
     # Make sure it ran without error codes
     my $vep_cmd = "$perl_bin $vep_script --config vep.config --input_file $input_vcf --output_file $output_vcf";
-    print $vep_cmd . "\n";
     system( $vep_cmd ) == 0 or die "\nERROR: Failed to run the VEP annotator! Command: $vep_cmd\n";
     ( -s $output_vcf ) or warn "WARNING: VEP-annotated VCF file is missing or empty: $output_vcf\n";
 }
