@@ -428,7 +428,7 @@ foreach my $region ( @ref_regions ) {
 # Annotate variants in given VCF to all possible transcripts
 my $output_vcf = ( $remap_chain ? "$tmp_dir/$input_name.remap.vep.vcf" : "$tmp_dir/$input_name.vep.vcf" );
 # Skip running VEP if an annotated VCF already exists
-unless( -s $output_vcf ) {
+#unless( -s $output_vcf ) {
     warn "STATUS: Running VEP and writing to: $output_vcf\n";
     # Make sure we can find the VEP script
     my $vep_script = ( -s "$vep_path/vep" ? "$vep_path/vep" : "$vep_path/variant_effect_predictor.pl" );
@@ -457,7 +457,7 @@ unless( -s $output_vcf ) {
     my $vep_cmd = "$perl_bin $vep_script --config vep.config --input_file $input_vcf --output_file $output_vcf";
     system( $vep_cmd ) == 0 or die "\nERROR: Failed to run the VEP annotator! Command: $vep_cmd\n";
     ( -s $output_vcf ) or warn "WARNING: VEP-annotated VCF file is missing or empty: $output_vcf\n";
-}
+#}
 
 # Define default MAF Header (https://wiki.nci.nih.gov/x/eJaPAQ) with our vcf2maf additions
 my @maf_header = qw(
