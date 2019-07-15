@@ -533,7 +533,7 @@ $maf_fh->print( "#version 2.4\n" . join( "\t", @maf_header ), "\n" ); # Print MA
 my $annotated_vcf_fh = IO::File->new( $output_vcf ) or die "ERROR: Couldn't open annotated VCF: $output_vcf!\n";
 my ( $vcf_tumor_idx, $vcf_normal_idx, %sv_pair );
 while( my $line = $annotated_vcf_fh->getline ) {
-    
+
     # Parse out the VEP CSQ/ANN format, which seems to differ between runs
     if( $line =~ m/^##INFO=<ID=(CSQ|ANN).*Format: (\S+)">$/ ) {
         # Use this as the expected column order of VEP annotation, unless we already got it from CSQ
@@ -640,10 +640,10 @@ while( my $line = $annotated_vcf_fh->getline ) {
     # Backup the VCF-style position and REF/ALT alleles, so we can use it later
     my ( $vcf_pos, $vcf_ref, $vcf_var ) = ( $pos, $ref, $var );
     # Remove any prefixed reference bps from all alleles, using "-" for simple indels
-   # while( $ref and $var and substr( $ref, 0, 1 ) eq substr( $var, 0, 1 ) and $ref ne $var ) {
-   #     ( $ref, $var, @alleles ) = map{$_ = substr( $_, 1 ); ( $_ ? $_ : "-" )} ( $ref, $var, @alleles );
-   #     --$ref_length; --$var_length; ++$pos;
-   # }
+   while( $ref and $var and substr( $ref, 0, 1 ) eq substr( $var, 0, 1 ) and $ref ne $var ) {
+       ( $ref, $var, @alleles ) = map{$_ = substr( $_, 1 ); ( $_ ? $_ : "-" )} ( $ref, $var, @alleles );
+       --$ref_length; --$var_length; ++$pos;
+   }
     # Handle SNPs, DNPs, TNPs, or anything larger (ONP)
     if( $ref_length == $var_length ) {
         ( $start, $stop ) = ( $pos, $pos + $var_length - 1 );
@@ -900,7 +900,7 @@ while( my $line = $annotated_vcf_fh->getline ) {
     foreach my $fmt_col ( @addl_fmt_cols ) {
         my $fmt_key = $fmt_col;
         if ( $fmt_key =~ /^t_/ ) { $fmt_key =~ s/^t_//; $maf_line{$fmt_col} = ( defined $tum_info{$fmt_key} ? $tum_info{$fmt_key} : "" ); }
-        if ( $fmt_key =~ /^n_/ ) { $fmt_key =~ s/^n_//; $maf_line{$fmt_col} = ( defined $nrm_info{$fmt_key} ? $nrm_info{$fmt_key} : "" ); }  
+        if ( $fmt_key =~ /^n_/ ) { $fmt_key =~ s/^n_//; $maf_line{$fmt_col} = ( defined $nrm_info{$fmt_key} ? $nrm_info{$fmt_key} : "" ); }
     }
 
     # If this is an SV, pair up gene names from separate lines to backfill the Fusion column later
@@ -1024,7 +1024,7 @@ sub FixAlleleDepths {
     elsif( !defined $fmt_info{AD} and defined $fmt_info{TIR} and defined $fmt_info{TAR}) {
         @depths = map{""} @alleles;
         $depths[0] = ( split /,/, $fmt_info{TAR} )[0];
-        $depths[$var_allele_idx] = ( split /,/, $fmt_info{TIR} )[0];	
+        $depths[$var_allele_idx] = ( split /,/, $fmt_info{TIR} )[0];
     }
     # Handle VCF lines by CaVEMan, where allele depths are in FAZ:FCZ:FGZ:FTZ:RAZ:RCZ:RGZ:RTZ
     elsif( !defined $fmt_info{AD} and scalar( grep{defined $fmt_info{$_}} qw/FAZ FCZ FGZ FTZ RAZ RCZ RGZ RTZ/ ) == 8 ) {
