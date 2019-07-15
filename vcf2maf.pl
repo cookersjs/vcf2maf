@@ -640,10 +640,10 @@ while( my $line = $annotated_vcf_fh->getline ) {
     # Backup the VCF-style position and REF/ALT alleles, so we can use it later
     my ( $vcf_pos, $vcf_ref, $vcf_var ) = ( $pos, $ref, $var );
     # Remove any prefixed reference bps from all alleles, using "-" for simple indels
-    while( $ref and $var and substr( $ref, 0, 1 ) eq substr( $var, 0, 1 ) and $ref ne $var ) {
-        ( $ref, $var, @alleles ) = map{$_ = substr( $_, 1 ); ( $_ ? $_ : "-" )} ( $ref, $var, @alleles );
-        --$ref_length; --$var_length; ++$pos;
-    }
+   # while( $ref and $var and substr( $ref, 0, 1 ) eq substr( $var, 0, 1 ) and $ref ne $var ) {
+   #     ( $ref, $var, @alleles ) = map{$_ = substr( $_, 1 ); ( $_ ? $_ : "-" )} ( $ref, $var, @alleles );
+   #     --$ref_length; --$var_length; ++$pos;
+   # }
     # Handle SNPs, DNPs, TNPs, or anything larger (ONP)
     if( $ref_length == $var_length ) {
         ( $start, $stop ) = ( $pos, $pos + $var_length - 1 );
