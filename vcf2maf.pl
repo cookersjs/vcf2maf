@@ -413,7 +413,7 @@ foreach my $region ( @ref_regions ) {
     my $ref = $ref_bps{$region};
     my ( $locus ) = map{ my ( $chr, $pos ) = split( ":" ); ++$pos; "$chr:$pos" } split( "-", $region );
     if( !defined $flanking_bps{$region} ) {
-        warn "WARNING: Couldn't retrieve bps around $locus from reference FASTA: $ref_fasta\n";
+        #warn "WARNING: Couldn't retrieve bps around $locus from reference FASTA: $ref_fasta\n";
     }
     elsif( $flanking_bps{$region} !~ m/^[ACGTN]+$/ ) {
         warn "WARNING: Retrieved invalid bps " . $flanking_bps{$region} . " around $locus from reference FASTA: $ref_fasta\n";
